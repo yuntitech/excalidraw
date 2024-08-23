@@ -535,6 +535,7 @@ class App extends React.Component<AppProps, AppState> {
       event: PointerEvent,
     ]
   >();
+  mobileAdapterEnabled = false;
 
   constructor(props: AppProps) {
     super(props);
@@ -547,7 +548,11 @@ class App extends React.Component<AppProps, AppState> {
       objectsSnapModeEnabled = false,
       theme = defaultAppState.theme,
       name = defaultAppState.name,
+      mobileAdapterEnabled = false,
+      appAPI,
     } = props;
+
+    this.mobileAdapterEnabled = mobileAdapterEnabled;
     this.state = {
       ...defaultAppState,
       theme,
@@ -624,6 +629,9 @@ class App extends React.Component<AppProps, AppState> {
 
     this.actionManager.registerAction(createUndoAction(this.history));
     this.actionManager.registerAction(createRedoAction(this.history));
+    if (appAPI) {
+      appAPI(this);
+    }
   }
 
   private onWindowMessage(event: MessageEvent) {
@@ -1667,6 +1675,10 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   private isMobileBreakpoint = (width: number, height: number) => {
+    if (!this.mobileAdapterEnabled) {
+      return false;
+    }
+
     return (
       width < MQ_MAX_WIDTH_PORTRAIT ||
       (height < MQ_MAX_HEIGHT_LANDSCAPE && width < MQ_MAX_WIDTH_LANDSCAPE)

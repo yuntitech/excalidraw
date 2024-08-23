@@ -487,7 +487,7 @@ export type UIOptions = Partial<{
   dockedSidebarBreakpoint: number;
   canvasActions: CanvasActions;
   tools: {
-    image: boolean;
+    [key in ToolType]?: boolean;
   };
   /** @deprecated does nothing. Will be removed in 0.15 */
   welcomeScreen?: boolean;
